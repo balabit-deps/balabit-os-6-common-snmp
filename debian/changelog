@@ -1,0 +1,11 @@
+snmp-common (1.0-2) zorpos50; urgency=low
+
+  * Removed unnecessary OBJECT-IDENTITY import
+
+ -- Andras Tim <andras.tim@balabit.com>  Fri, 01 Jul 2016 19:50:01 +0200
+
+snmp-common (1.0-1) zorpos5.0; urgency=low
+
+  * Initial release.
+
+ -- bbalazs <bbalazs@balabit.hu>  Tue, 31 May 2016 13:26:20 +0200

@@ -1,0 +1,10 @@
+Source: snmp-common
+Maintainer: bbalazs <balazs.benedek@balabit.com>
+Priority: extra
+Section: net
+Build-Depends: debhelper (>= 7)
+Standards-Version: 1.0
+
+Package: snmp-common
+Architecture: all
+Description: This package contains common (BalaBit, SCB-SSB) snmp MIB files.

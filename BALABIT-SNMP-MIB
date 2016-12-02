@@ -1,0 +1,24 @@
+BALABIT-SNMP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, enterprises
+        FROM SNMPv2-SMI;
+
+balabit MODULE-IDENTITY
+    LAST-UPDATED "201512010000Z"
+    ORGANIZATION "Balabit"
+    CONTACT-INFO
+        "web:     http://www.balabit.com/"
+    DESCRIPTION
+        "Balabit root module"
+    REVISION "201512010000Z"
+    DESCRIPTION "Fixed errors, warnings, and non-compliances in the MIB, updated organization name"
+    REVISION "201503120000Z"
+    DESCRIPTION "Updated organization and contact info"
+    REVISION "200708160000Z"
+    DESCRIPTION "Initial version"
+    ::= { enterprises 18372 }
+
+balabitSnmp OBJECT IDENTIFIER ::= { balabit 3 }
+
+END

@@ -1,0 +1,249 @@
+XCB-SNMP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    OBJECT-TYPE, NOTIFICATION-TYPE, MODULE-IDENTITY, IpAddress
+        FROM SNMPv2-SMI
+
+    DisplayString
+        FROM SNMPv2-TC
+
+    OBJECT-GROUP, NOTIFICATION-GROUP
+        FROM SNMPv2-CONF
+
+    balabitSnmp
+        FROM BALABIT-SNMP-MIB;
+
+xcb MODULE-IDENTITY
+    LAST-UPDATED "201512010000Z"
+    ORGANIZATION "Balabit"
+    CONTACT-INFO
+        "web:     http://www.balabit.com/"
+    DESCRIPTION
+        "Balabit Shell Control Box SNMP MIB XCB root module"
+    REVISION "201512010000Z"
+    DESCRIPTION "Fixed errors, warnings, and non-compliances in the MIB, updated organization name"
+    REVISION "201406030000Z"
+    DESCRIPTION "Updated organization and contact info"
+    REVISION "200808280000Z"
+    DESCRIPTION "Initial version"
+    ::= { balabitSnmp 1 }
+
+
+xcbMib         OBJECT IDENTIFIER ::= { xcb 1 }
+xcbObjects     OBJECT IDENTIFIER ::= { xcbMib 1 }
+xcbTypes       OBJECT IDENTIFIER ::= { xcbObjects 1 }
+xcbTraps       OBJECT IDENTIFIER ::= { xcbObjects 2 }
+xcbGroups      OBJECT IDENTIFIER ::= { xcbObjects 3 }
+
+-- *******************
+-- Type definitions
+-- *******************
+
+xcbTypesGroup OBJECT-GROUP
+    OBJECTS
+        {
+            description, username, peerAddress, reason, node
+        }
+    STATUS current
+    DESCRIPTION "XCB related types"
+    ::= { xcbGroups 3 }
+
+description OBJECT-TYPE
+    SYNTAX DisplayString
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "General description field"
+    ::= { xcbTypes 1 }
+
+username OBJECT-TYPE
+    SYNTAX DisplayString
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "Username of the current user"
+    ::= { xcbTypes 2 }
+
+peerAddress OBJECT-TYPE
+    SYNTAX IpAddress
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "IP address of the client"
+    ::= { xcbTypes 3 }
+
+reason OBJECT-TYPE
+    SYNTAX DisplayString
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "Details of the error"
+    ::= { xcbTypes 4 }
+
+node OBJECT-TYPE
+    SYNTAX DisplayString
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "ID of a cluster node"
+    ::= { xcbTypes 5 }
+
+-- *******************
+-- TRAPS
+-- *******************
+
+-- *******************
+-- System traps
+-- *******************
+
+systemTrapsGroup NOTIFICATION-GROUP
+    NOTIFICATIONS
+        {
+            testTrap, xcbLogin, xcbLoginFailure, xcbLogout, xcbConfigChange, xcbAlert, xcbError,
+            xcbBackupFailed, xcbArchiveFailed, xcbDBError, xcbLimitReached, xcbHaNodeChanged,
+            xcbTimestampError, xcbTimeSyncLost, xcbRaidStatus, xcbHWError, xcbFirmwareTainted,
+            xcbBruteforceAttempt, xcbLicenseAlmostExpired
+        }
+    STATUS current
+    DESCRIPTION
+    "System related traps"
+    ::= { xcbGroups 1 }
+
+healthTrapsGroup NOTIFICATION-GROUP
+    NOTIFICATIONS
+        {
+            xcbDiskFull, xcbSwapFull, xcbLoadAvgHigh
+        }
+    STATUS current
+    DESCRIPTION
+    "Health related traps"
+    ::= { xcbGroups 2 }
+
+testTrap NOTIFICATION-TYPE
+    OBJECTS { description, username, peerAddress }
+    STATUS current
+    DESCRIPTION "Test system trap"
+    ::= { xcbTraps 1 }
+
+xcbLoginFailure NOTIFICATION-TYPE
+    OBJECTS { description, username, peerAddress }
+    STATUS current
+    DESCRIPTION "Login failed"
+    ::= { xcbTraps 2 }
+
+xcbLogin NOTIFICATION-TYPE
+    OBJECTS { description, username, peerAddress }
+    STATUS current
+    DESCRIPTION "Successful login"
+    ::= { xcbTraps 3 }
+
+xcbLogout NOTIFICATION-TYPE
+    OBJECTS { description, username, peerAddress }
+    STATUS current
+    DESCRIPTION "Logout from the management interface"
+    ::= { xcbTraps 4 }
+
+xcbConfigChange NOTIFICATION-TYPE
+    OBJECTS { description, username, peerAddress }
+    STATUS current
+    DESCRIPTION "Configuration changed"
+    ::= { xcbTraps 5 }
+
+xcbAlert NOTIFICATION-TYPE
+    OBJECTS { description, username, peerAddress }
+    STATUS current
+    DESCRIPTION "General alert"
+    ::= { xcbTraps 6 }
+
+xcbError NOTIFICATION-TYPE
+    OBJECTS { description, username, peerAddress }
+    STATUS current
+    DESCRIPTION "General error"
+    ::= { xcbTraps 7 }
+
+xcbBackupFailed NOTIFICATION-TYPE
+    OBJECTS { description, reason }
+    STATUS current
+    DESCRIPTION "Data and configuration backup failed"
+    ::= { xcbTraps 8 }
+
+xcbArchiveFailed NOTIFICATION-TYPE
+    OBJECTS { description, reason }
+    STATUS current
+    DESCRIPTION "Data archiving failed"
+    ::= { xcbTraps 9 }
+
+xcbDBError NOTIFICATION-TYPE
+    OBJECTS { description, reason }
+    STATUS current
+    DESCRIPTION "Database error occurred"
+    ::= { xcbTraps 10 }
+
+xcbLimitReached NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "License limit reached"
+    ::= { xcbTraps 11 }
+
+xcbHaNodeChanged NOTIFICATION-TYPE
+    OBJECTS { description, node }
+    STATUS current
+    DESCRIPTION "HA node state changed"
+    ::= { xcbTraps 12 }
+
+xcbTimestampError NOTIFICATION-TYPE
+    OBJECTS { description, reason }
+    STATUS current
+    DESCRIPTION "Timestamping error occurred"
+    ::= { xcbTraps 13 }
+
+xcbTimeSyncLost NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "Time sync lost"
+    ::= { xcbTraps 14 }
+
+xcbRaidStatus NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "Raid status changed"
+    ::= { xcbTraps 15 }
+
+xcbHWError NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "Hardware error occurred"
+    ::= { xcbTraps 16 }
+
+xcbFirmwareTainted NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "Firmware is tainted"
+    ::= { xcbTraps 17 }
+
+xcbDiskFull NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "Disk usage is above the defined ratio"
+    ::= { xcbTraps 18 }
+
+xcbSwapFull NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "Swap usage is above the defined ratio"
+    ::= { xcbTraps 19 }
+
+xcbLoadAvgHigh NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "System load is above the defined maximum"
+    ::= { xcbTraps 20 }
+
+xcbBruteforceAttempt NOTIFICATION-TYPE
+    OBJECTS { description, username, peerAddress }
+    STATUS current
+    DESCRIPTION "Too many login attempts"
+    ::= { xcbTraps 21 }
+
+xcbLicenseAlmostExpired NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "License expires soon"
+    ::= { xcbTraps 22 }
+
+END
