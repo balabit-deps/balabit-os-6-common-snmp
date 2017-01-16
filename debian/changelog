@@ -1,3 +1,9 @@
+snmp-common (2.0-1) balabitos; urgency=low
+
+  * Added new mibs on xenial.
+
+ -- bbalazs <balazs.benedek@balabit.com>  Mon, 16 Jan 2017 15:54:40 +0100
+
 snmp-common (1.0-2) zorpos50; urgency=low
 
   * Removed unnecessary OBJECT-IDENTITY import
