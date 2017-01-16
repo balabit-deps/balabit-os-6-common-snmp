@@ -1,0 +1,200 @@
+SSB-SNMP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    OBJECT-TYPE, NOTIFICATION-TYPE, MODULE-IDENTITY, Integer32
+        FROM SNMPv2-SMI
+
+    DisplayString
+        FROM SNMPv2-TC
+
+    NOTIFICATION-GROUP, OBJECT-GROUP
+        FROM SNMPv2-CONF
+
+    balabitSnmp
+        FROM BALABIT-SNMP-MIB
+
+    description
+        FROM XCB-SNMP-MIB;
+
+ssb MODULE-IDENTITY
+    LAST-UPDATED "201609200000Z"
+    ORGANIZATION "Balabit"
+    CONTACT-INFO
+    "
+        postal:     Budapest
+                    Aliz street 2.
+                    H-1117, Hungary
+
+           web:     http://www.balabit.com/
+    "
+    DESCRIPTION
+        "Balabit Syslog-ng Store Box SNMP MIB root module"
+
+    REVISION "201609200000Z"
+    DESCRIPTION "Changed organization name from Balabit to Balabit in description"
+
+    REVISION "201606100000Z"
+    DESCRIPTION "Fixed errors, warnings, and non-compliances in the MIB"
+
+    REVISION "201405140000Z"
+    DESCRIPTION "Initial version"
+    ::= { balabitSnmp 3 }
+
+ssbMib         OBJECT IDENTIFIER ::= { ssb 1 }
+ssbObjects     OBJECT IDENTIFIER ::= { ssbMib 1 }
+ssbTypes       OBJECT IDENTIFIER ::= { ssbObjects 1 }
+ssbTraps       OBJECT IDENTIFIER ::= { ssbObjects 2 }
+ssbGroups      OBJECT IDENTIFIER ::= { ssbObjects 3 }
+
+-- *******************
+-- TYPES
+-- *******************
+
+ssbTypesGroup OBJECT-GROUP
+    OBJECTS
+        {
+            hostname, logspace, parent, violationNumber,
+            min, max, entity, alertState, supressedMessages, limit
+        }
+    STATUS current
+    DESCRIPTION "SSB related types"
+    ::= { ssbGroups 2 }
+
+hostname OBJECT-TYPE
+    SYNTAX DisplayString
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "hostname"
+    ::= { ssbTypes 1 }
+
+logspace OBJECT-TYPE
+    SYNTAX DisplayString
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "logspace name"
+    ::= { ssbTypes 2 }
+
+parent OBJECT-TYPE
+    SYNTAX DisplayString
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "Group of message rate alert"
+    ::= { ssbTypes 3 }
+
+violationNumber OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "Number of messages that triggered the violation"
+    ::= { ssbTypes 4 }
+
+min OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "Minimum limit configured"
+    ::= { ssbTypes 5 }
+
+max OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "Maximum limit configured"
+    ::= { ssbTypes 6 }
+
+entity OBJECT-TYPE
+    SYNTAX DisplayString
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "Entity of message rate alert"
+    ::= { ssbTypes 7 }
+
+alertState OBJECT-TYPE
+    SYNTAX DisplayString
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "State of the alert: empty if it's always sent out, triggered if it's triggered and fixed if fixed"
+    ::= { ssbTypes 8 }
+
+supressedMessages OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "Number of messages that were supressed"
+    ::= { ssbTypes 9 }
+
+limit OBJECT-TYPE
+    SYNTAX Integer32
+    MAX-ACCESS accessible-for-notify
+    STATUS current
+    DESCRIPTION "Configured alert limit"
+    ::= { ssbTypes 10 }
+
+-- *******************
+-- TRAPS
+-- *******************
+
+-- *******************
+-- SSB traps
+-- *******************
+
+syslogngTrapsGroup NOTIFICATION-GROUP
+    NOTIFICATIONS
+        {
+            syslogngFailureTrap, peerConfigChangeTrap, spaceSizeLimit, ssbAbsoluteMessageRateAlert,
+            ssbRateLimitTooManyAlerts, ssbStatisticsError, ssbSqlSourceAlert, syslogngConcurrentConnectionsReached
+        }
+    STATUS current
+    DESCRIPTION
+    "syslog-ng traps"
+    ::= { ssbGroups 1 }
+
+syslogngFailureTrap NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "syslog-ng failure"
+    ::= { ssbTraps 1 }
+
+peerConfigChangeTrap NOTIFICATION-TYPE
+    OBJECTS { description, hostname }
+    STATUS current
+    DESCRIPTION "Remote syslog-ng peer configuration changed"
+    ::= { ssbTraps 2 }
+
+spaceSizeLimit NOTIFICATION-TYPE
+    OBJECTS { description, logspace }
+    STATUS current
+    DESCRIPTION "Logspace exceeded warning size"
+    ::= { ssbTraps 3 }
+
+ssbAbsoluteMessageRateAlert NOTIFICATION-TYPE
+    OBJECTS { description, parent, violationNumber, min, max, entity, alertState }
+    STATUS current
+    DESCRIPTION "Message rate was outside the specified limits"
+    ::= { ssbTraps 4 }
+
+ssbRateLimitTooManyAlerts NOTIFICATION-TYPE
+    OBJECTS { description, supressedMessages, limit }
+    STATUS current
+    DESCRIPTION "Too many message rate alerts were generated"
+    ::= { ssbTraps 5 }
+
+ssbStatisticsError NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "Error during syslog-ng traffic statistics processing"
+    ::= { ssbTraps 6 }
+
+ssbSqlSourceAlert NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "Error during an sql-source related operation"
+    ::= { ssbTraps 7 }
+
+syslogngConcurrentConnectionsReached NOTIFICATION-TYPE
+    OBJECTS { description }
+    STATUS current
+    DESCRIPTION "Number of allowed concurrent connections reached, rejecting connection"
+    ::= { ssbTraps 8 }
+
+END
