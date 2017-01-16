@@ -1,3 +1,9 @@
+snmp-common (2.0-2) balabitos; urgency=low
+
+  * Moved mib files into a mibs/ directory
+
+ -- bbalazs <balazs.benedek@balabit.com>  Mon, 16 Jan 2017 16:07:00 +0100
+
 snmp-common (2.0-1) balabitos; urgency=low
 
   * Added new mibs on xenial.
