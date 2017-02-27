@@ -1,3 +1,9 @@
+snmp-common (2.0-4) balabitos; urgency=low
+
+  * Changed mib files destinton to usr/share/snmp/mibs/site/
+
+ -- balintkartyas <balint.kartyas@balabit.com>  Mon, 27 Feb 2017 12:45:25 +0100
+
 snmp-common (2.0-3) balabitos; urgency=low
 
   * Removed SSNB-SNMP-MIB file
